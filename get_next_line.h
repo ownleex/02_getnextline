@@ -6,7 +6,7 @@
 /*   By: ayarmaya <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/08 16:48:54 by ayarmaya          #+#    #+#             */
-/*   Updated: 2023/12/10 16:40:06 by ayarmaya         ###   ########.fr       */
+/*   Updated: 2023/12/12 17:06:43 by ayarmaya         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,12 +22,9 @@
 #  define BUFFER_SIZE 1000
 # endif
 
+int		ft_strlen(char *str);
+char	*ft_strdup(char *str, int len);
+char	*ft_strjoin(char *s1, char *s2);
 char	*get_next_line(int fd);
-char	*ft_read_to_left_str(int fd, char *left_str);
-char	*ft_strchr(char *s, int c);
-char	*ft_strjoin(char *left_str, char *buff);
-size_t	ft_strlen(char *s);
-char	*ft_get_line(char *left_str);
-char	*ft_new_left_str(char *left_str);
 
 #endif

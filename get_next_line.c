@@ -6,52 +6,75 @@
 /*   By: ayarmaya <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/08 16:48:01 by ayarmaya          #+#    #+#             */
-/*   Updated: 2023/12/10 19:02:13 by ayarmaya         ###   ########.fr       */
+/*   Updated: 2023/12/12 17:04:39 by ayarmaya         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-char	*ft_read_to_left_str(int fd, char *left_str)
+int	ft_next(char *str)
 {
-	char	*buff;
-	int		rd_bytes;
+	int		i;
 
-	buff = malloc((BUFFER_SIZE + 1) * sizeof(char));
-	if (!buff)
+	if (!str)
+		return (0);
+	i = -1;
+	while (str[++i])
+		if (str[i] == '\n')
+			return (1);
+	return (0);
+}
+
+char	*ft_print_line(char **temp)
+{
+	int		cursor;
+	char	*line;
+	char	*str;
+
+	if (!*temp)
 		return (NULL);
-	rd_bytes = 1;
-	while (!ft_strchr(left_str, '\n') && rd_bytes != 0)
-	{
-		rd_bytes = read(fd, buff, BUFFER_SIZE);
-		if (rd_bytes == -1)
-		{
-			free(buff);
-			return (NULL);
-		}
-		buff[rd_bytes] = '\0';
-		left_str = ft_strjoin(left_str, buff);
-	}
-	free(buff);
-	return (left_str);
+	str = *temp;
+	cursor = 0;
+	while (str[cursor] && str[cursor] != '\n')
+		cursor++;
+	if (str[cursor] == '\n')
+		cursor++;
+	line = ft_strdup(str, cursor);
+	*temp = ft_strdup(str + cursor, ft_strlen(str + cursor));
+	if (str)
+		free(str);
+	str = NULL;
+	return (line);
 }
 
 char	*get_next_line(int fd)
 {
-	char		*line;
-	static char	*left_str;
+	static char		*str;
+	char			*buffer;
+	int				n_read;
 
-	if (fd < 0 || BUFFER_SIZE <= 0)
-		return (0);
-	left_str = ft_read_to_left_str(fd, left_str);
-	if (!left_str)
+	if (fd < 0 || BUFFER_SIZE <= 0 || read(fd, 0, 0) < 0)
+		return (free(str), str = NULL, NULL);
+	if (ft_next(str))
+		return (ft_print_line(&str));
+	buffer = (char *)malloc((BUFFER_SIZE + 1) * sizeof(char));
+	if (!buffer)
 		return (NULL);
-	line = ft_get_line(left_str);
-	left_str = ft_new_left_str(left_str);
-	return (line);
+	n_read = 1;
+	while (n_read > 0)
+	{
+		n_read = read(fd, buffer, BUFFER_SIZE);
+		buffer[n_read] = 0;
+		str = ft_strjoin(str, buffer);
+		if (ft_next(str))
+			break ;
+	}
+	if (buffer)
+		free(buffer);
+	buffer = NULL;
+	return (ft_print_line(&str));
 }
 
-/*
 int main()
 {
     int fd;
@@ -76,4 +99,3 @@ int main()
     close(fd);
     return 0;
 }
-*/
