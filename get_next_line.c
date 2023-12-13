@@ -6,7 +6,7 @@
 /*   By: ayarmaya <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/08 16:48:01 by ayarmaya          #+#    #+#             */
-/*   Updated: 2023/12/12 17:04:39 by ayarmaya         ###   ########.fr       */
+/*   Updated: 2023/12/13 17:15:07 by ayarmaya         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,21 +29,21 @@ char	*ft_print_line(char **temp)
 {
 	int		cursor;
 	char	*line;
-	char	*str;
+	char	*temp_str;
 
 	if (!*temp)
 		return (NULL);
-	str = *temp;
+	temp_str = *temp;
 	cursor = 0;
-	while (str[cursor] && str[cursor] != '\n')
+	while (temp_str[cursor] && temp_str[cursor] != '\n')
 		cursor++;
-	if (str[cursor] == '\n')
+	if (temp_str[cursor] == '\n')
 		cursor++;
-	line = ft_strdup(str, cursor);
-	*temp = ft_strdup(str + cursor, ft_strlen(str + cursor));
-	if (str)
-		free(str);
-	str = NULL;
+	line = ft_strdup(temp_str, cursor);
+	*temp = ft_strdup(temp_str + cursor, ft_strlen(temp_str + cursor));
+	if (temp_str)
+		free(temp_str);
+	temp_str = NULL;
 	return (line);
 }
 
@@ -75,27 +75,29 @@ char	*get_next_line(int fd)
 	return (ft_print_line(&str));
 }
 
-int main()
+/*
+int	main()
 {
-    int fd;
-    char *line;
+	int		fd;
+	char	*line;
 
-    // Ouverture du fichier en lecture seule
-    fd = open("test.txt", O_RDONLY);
-    if (fd == -1)
-    {
-        perror("Erreur lors de l'ouverture du fichier");
-        return 1;
-    }
+	// Ouverture du fichier en lecture seule
+	fd = open("test.txt", O_RDONLY);
+	if (fd == -1)
+	{
+		perror("Erreur lors de l'ouverture du fichier");
+		return 1;
+	}
 
-    // Lecture et affichage de chaque ligne du fichier
-    while ((line = get_next_line(fd)) != NULL)
-    {
-        printf("%s", line);
-        free(line);
-    }
+	// Lecture et affichage de chaque ligne du fichier
+	while ((line = get_next_line(fd)) != NULL)
+	{
+		printf("%s", line);
+		free(line);
+	}
 
-    // Fermeture du fichier
-    close(fd);
-    return 0;
+	// Fermeture du fichier
+	close(fd);
+	return 0;
 }
+*/
