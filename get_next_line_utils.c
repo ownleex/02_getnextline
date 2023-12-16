@@ -6,7 +6,7 @@
 /*   By: ayarmaya <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/08 16:48:47 by ayarmaya          #+#    #+#             */
-/*   Updated: 2023/12/16 14:39:11 by ayarmaya         ###   ########.fr       */
+/*   Updated: 2023/12/16 14:48:50 by ayarmaya         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,6 @@ char	*ft_strndup(char *str, int len)
 	if (!str || !len)
 		return (NULL);
 	result = (char *)malloc((len + 1) * sizeof(char));
-	if (!result)
-		return (NULL);
 	count = -1;
 	while (++count < len)
 		result[count] = str[count];
