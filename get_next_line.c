@@ -6,7 +6,7 @@
 /*   By: ayarmaya <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/08 16:48:01 by ayarmaya          #+#    #+#             */
-/*   Updated: 2023/12/13 17:15:07 by ayarmaya         ###   ########.fr       */
+/*   Updated: 2023/12/16 03:14:49 by ayarmaya         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,8 @@ int	ft_next(char *str)
 
 	if (!str)
 		return (0);
-	i = -1;
-	while (str[++i])
+	i = 0;
+	while (str[i++])
 		if (str[i] == '\n')
 			return (1);
 	return (0);
@@ -39,8 +39,8 @@ char	*ft_print_line(char **temp)
 		cursor++;
 	if (temp_str[cursor] == '\n')
 		cursor++;
-	line = ft_strdup(temp_str, cursor);
-	*temp = ft_strdup(temp_str + cursor, ft_strlen(temp_str + cursor));
+	line = ft_strndup(temp_str, cursor);
+	*temp = ft_strndup(temp_str + cursor, ft_strlen(temp_str + cursor));
 	if (temp_str)
 		free(temp_str);
 	temp_str = NULL;
@@ -49,29 +49,30 @@ char	*ft_print_line(char **temp)
 
 char	*get_next_line(int fd)
 {
-	static char		*str;
-	char			*buffer;
-	int				n_read;
+	static char	*str;
+	char		*buffer;
+	int			n_read;
 
-	if (fd < 0 || BUFFER_SIZE <= 0 || read(fd, 0, 0) < 0)
-		return (free(str), str = NULL, NULL);
-	if (ft_next(str))
-		return (ft_print_line(&str));
-	buffer = (char *)malloc((BUFFER_SIZE + 1) * sizeof(char));
+	if (fd < 0 || BUFFER_SIZE <= 0)
+		return (NULL);
+	buffer = (char *)malloc(sizeof(char) * (BUFFER_SIZE + 1));
 	if (!buffer)
 		return (NULL);
 	n_read = 1;
 	while (n_read > 0)
 	{
 		n_read = read(fd, buffer, BUFFER_SIZE);
-		buffer[n_read] = 0;
+		if (n_read < 0)
+		{
+			free(buffer);
+			return (free(str), str = NULL, NULL);
+		}
+		buffer[n_read] = '\0';
 		str = ft_strjoin(str, buffer);
-		if (ft_next(str))
+		if (ft_next(str) || n_read == 0)
 			break ;
 	}
-	if (buffer)
-		free(buffer);
-	buffer = NULL;
+	free(buffer);
 	return (ft_print_line(&str));
 }
 
@@ -99,5 +100,22 @@ int	main()
 	// Fermeture du fichier
 	close(fd);
 	return 0;
+}
+
+
+int     main(void)
+{
+        int fd = open("test.txt", O_RDONLY);
+        char    *str;
+        
+        while (1)
+        {
+                str = get_next_line(fd);
+                if (str == NULL)
+                        break;
+                printf("%s", str);
+                free(str);
+        }
+        return (0);
 }
 */
