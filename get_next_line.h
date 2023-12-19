@@ -6,7 +6,7 @@
 /*   By: ayarmaya <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/08 16:48:54 by ayarmaya          #+#    #+#             */
-/*   Updated: 2023/12/15 14:02:50 by ayarmaya         ###   ########.fr       */
+/*   Updated: 2023/12/16 17:26:40 by ayarmaya         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@
 # endif
 
 size_t	ft_strlen(char *str);
-char	*ft_strndup(char *str, int len);
+char	*ft_strndup(char *str, size_t len);
 char	*ft_strjoin(char *s1, char *s2);
 char	*get_next_line(int fd);
 

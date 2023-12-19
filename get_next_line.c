@@ -6,7 +6,7 @@
 /*   By: ayarmaya <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/08 16:48:01 by ayarmaya          #+#    #+#             */
-/*   Updated: 2023/12/16 03:14:49 by ayarmaya         ###   ########.fr       */
+/*   Updated: 2023/12/18 18:51:15 by ayarmaya         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 int	ft_next(char *str)
 {
-	int		i;
+	size_t	i;
 
 	if (!str)
 		return (0);
@@ -25,26 +25,40 @@ int	ft_next(char *str)
 	return (0);
 }
 
-char	*ft_print_line(char **temp)
+char	*ft_print_line(char **str)
 {
-	int		cursor;
+	size_t	back_n;
 	char	*line;
 	char	*temp_str;
 
-	if (!*temp)
+	if (!*str)
 		return (NULL);
-	temp_str = *temp;
-	cursor = 0;
-	while (temp_str[cursor] && temp_str[cursor] != '\n')
-		cursor++;
-	if (temp_str[cursor] == '\n')
-		cursor++;
-	line = ft_strndup(temp_str, cursor);
-	*temp = ft_strndup(temp_str + cursor, ft_strlen(temp_str + cursor));
-	if (temp_str)
-		free(temp_str);
+	temp_str = *str;
+	back_n = 0;
+	while (temp_str[back_n] && temp_str[back_n] != '\n')
+		back_n++;
+	if (temp_str[back_n] == '\n')
+		back_n++;
+	line = ft_strndup(temp_str, back_n);
+	*str = ft_strndup(temp_str + back_n, ft_strlen(temp_str + back_n));
+	free(temp_str);
 	temp_str = NULL;
 	return (line);
+}
+
+void	*ft_cleanup(char **str, char **buffer)
+{
+	if (*str)
+	{
+		free(*str);
+		*str = NULL;
+	}
+	if (*buffer)
+	{
+		free(*buffer);
+		*buffer = NULL;
+	}
+	return (NULL);
 }
 
 char	*get_next_line(int fd)
@@ -58,19 +72,19 @@ char	*get_next_line(int fd)
 	buffer = (char *)malloc(sizeof(char) * (BUFFER_SIZE + 1));
 	if (!buffer)
 		return (NULL);
-	n_read = 1;
-	while (n_read > 0)
+	if (!ft_next(str))
 	{
-		n_read = read(fd, buffer, BUFFER_SIZE);
-		if (n_read < 0)
+		n_read = 1;
+		while (n_read > 0)
 		{
-			free(buffer);
-			return (free(str), str = NULL, NULL);
+			n_read = read(fd, buffer, BUFFER_SIZE);
+			if (n_read < 0)
+				return (ft_cleanup(&str, &buffer));
+			buffer[n_read] = '\0';
+			str = ft_strjoin(str, buffer);
+			if (ft_next(str))
+				break ;
 		}
-		buffer[n_read] = '\0';
-		str = ft_strjoin(str, buffer);
-		if (ft_next(str) || n_read == 0)
-			break ;
 	}
 	free(buffer);
 	return (ft_print_line(&str));
@@ -83,7 +97,7 @@ int	main()
 	char	*line;
 
 	// Ouverture du fichier en lecture seule
-	fd = open("test.txt", O_RDONLY);
+	fd = open("1char.txt", O_RDONLY);
 	if (fd == -1)
 	{
 		perror("Erreur lors de l'ouverture du fichier");
@@ -100,22 +114,5 @@ int	main()
 	// Fermeture du fichier
 	close(fd);
 	return 0;
-}
-
-
-int     main(void)
-{
-        int fd = open("test.txt", O_RDONLY);
-        char    *str;
-        
-        while (1)
-        {
-                str = get_next_line(fd);
-                if (str == NULL)
-                        break;
-                printf("%s", str);
-                free(str);
-        }
-        return (0);
 }
 */

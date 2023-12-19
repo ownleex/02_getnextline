@@ -6,34 +6,36 @@
 /*   By: ayarmaya <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/08 16:48:47 by ayarmaya          #+#    #+#             */
-/*   Updated: 2023/12/16 14:48:50 by ayarmaya         ###   ########.fr       */
+/*   Updated: 2023/12/19 18:35:06 by ayarmaya         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-char	*ft_strndup(char *str, int len)
+char	*ft_strndup(char *str, size_t len)
 {
 	char	*result;
-	int		count;
+	size_t	i;
 
 	if (!str || !len)
 		return (NULL);
-	result = (char *)malloc((len + 1) * sizeof(char));
-	count = -1;
-	while (++count < len)
-		result[count] = str[count];
-	result[count] = '\0';
+	result = (char *)malloc(sizeof(char) * (len + 1));
+	i = 0;
+	while (i < len)
+	{
+		result[i] = str[i];
+		i++;
+	}
+	result[i] = '\0';
 	return (result);
 }
 
 char	*ft_strjoin(char *str, char *buffer)
 {
 	size_t	i;
-	int		len;
+	size_t	len;
 	char	*result;
 
-	i = 0;
 	if (!buffer)
 		return (NULL);
 	len = ft_strlen(buffer);
@@ -44,6 +46,7 @@ char	*ft_strjoin(char *str, char *buffer)
 	if (!result)
 		return (NULL);
 	len = 0;
+	i = 0;
 	while (str[i])
 		result[len++] = str[i++];
 	i = 0;
@@ -51,6 +54,7 @@ char	*ft_strjoin(char *str, char *buffer)
 		result[len++] = buffer[i++];
 	result[len] = '\0';
 	free(str);
+	str = NULL;
 	return (result);
 }
 
@@ -59,8 +63,6 @@ size_t	ft_strlen(char *str)
 	size_t	i;
 
 	i = 0;
-	if (!str)
-		return (0);
 	while (str[i])
 		i++;
 	return (i);
